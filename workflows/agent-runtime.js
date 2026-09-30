@@ -22,7 +22,7 @@ async function startAgents() {
 
   const totals = portfolio && portfolio.totals ? portfolio.totals : {};
   await sendTelegram(
-    `✅ S/Factory orchestration cycle completed\n` +
+    `✅ Factory orchestration cycle completed\n` +
     `Companies mapped: ${totals.mapped_companies ?? 'n/a'}\n` +
     `Urgent items: ${totals.urgent_items ?? 'n/a'}\n` +
     `Open items: ${totals.open_items ?? 'n/a'}`
