@@ -17,7 +17,7 @@ function run(command, args, cwd = HERE) {
 function requireNode24() {
   const major = Number(process.versions.node.split(".")[0]);
   if (major < 24) {
-    throw new Error(`S/Browser Stack requires Node >=24; current=${process.versions.node}`);
+    throw new Error(`Browser Stack requires Node >=24; current=${process.versions.node}`);
   }
 }
 
@@ -52,7 +52,7 @@ pnpm(["install", "--frozen-lockfile"], OPENBROWSER_DIR);
 // Call the recursive workspace build directly so it also works when pnpm is supplied by Corepack only.
 pnpm(["-r", "--sequential", "build"], OPENBROWSER_DIR);
 
-console.log("\nS/Browser Stack bootstrap complete.");
+console.log("\nBrowser Stack bootstrap complete.");
 console.log("- OpenBrowser: source installed and built at pinned commit");
 console.log("- Stagehand: installed locally (Browserbase credentials are injected only at runtime)");
 console.log("- agent-browser: installed locally with Chrome for Testing");
