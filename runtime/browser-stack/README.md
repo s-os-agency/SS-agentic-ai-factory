@@ -1,6 +1,6 @@
-# S/ Browser Runtime Stack
+# Browser Runtime Stack
 
-This package makes three browser engines available to S/Factory on demand:
+This package makes three browser engines available to Factory on demand:
 
 1. **OpenBrowser** — `OpenBrowserAI/openbrowser`, pinned to commit `b04fcf631fe67ddf7ab6d54f6388635d16f468f9` for a local/privacy-first Chromium path.
 2. **Stagehand + Browserbase** — `@browserbasehq/stagehand@4.0.2` for production browser-agent sessions, including persistent remote browser workflows when Browserbase credentials are injected at runtime.
