@@ -1,4 +1,4 @@
-# S/ Agentic AI Factory
+# Agentic AI Factory
 
 Execution-first Cursor agent runtime.
 
