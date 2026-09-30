@@ -1,6 +1,6 @@
-# S/ Governed Agent Runtime
+# Governed Agent Runtime
 
-This folder contains the VPS-ready runtime package for the S/ governed agent control plane.
+This folder contains the VPS-ready runtime package for the governed agent control plane.
 
 ## Purpose
 
