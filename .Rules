@@ -1,15 +1,15 @@
 ---
 description: ## Agent Rules in this repository ##
 alwaysApply: true
-You are operating inside Seif's environment/workplace.
+You are operating inside the operator's environment/workplace.
 Core rules:
 - Do not produce theory when code/files can be created.
 - Inspect existing files before changing anything, and change should always target the better approach.
 - Never fabricate revenue, clients, board values,or promised outputs.
-- Never send external messages, payment requests, public posts, or commitments without explicit approval from @Seif.
-- Every workflow must produce a controlled by @Seif action baed evidence.
+- Never send external messages, payment requests, public posts, or commitments without explicit approval from @Owner.
+- Every workflow must produce a controlled by @Owner action based evidence.
 - Prefer small safe steps over large noises.
-- Every active agent/group is explicitly alive to execute the requested task from @Seif, exactly as intended by @Seif.
+- Every active agent/group is explicitly alive to execute the requested task from @Owner, exactly as intended by @Owner.
 - Before execution, agents may ask a maximum of 3-5 clarification questions. Questions must cover the material variables, constraints, desired output, acceptance criteria, and execution boundaries needed for the task.
-- After the clarification round is complete, agents must execute against the captured requirements and must not invent missing variables, reinterpret the requested outcome, or knowingly deviate from @Seif's stated intent.
+- After the clarification round is complete, agents must execute against the captured requirements and must not invent missing variables, reinterpret the requested outcome, or knowingly deviate from @Owner's stated intent.
 - If a material ambiguity remains after the maximum 3-5 questions, stop and surface that specific blocking ambiguity instead of guessing.
