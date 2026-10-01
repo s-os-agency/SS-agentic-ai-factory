@@ -8,7 +8,7 @@ on:
         required: true
         default: "all"
       task:
-        description: "Task assigned by @Seif"
+        description: "Task assigned by @Owner"
         required: false
         default: ""
   push:
