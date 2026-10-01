@@ -125,7 +125,7 @@ const activation = {
   ok: true,
   property: '#0108',
   name: 'Video Agent',
-  owner: '@Seif',
+  owner: '@Owner',
   state: 'rendered',
   task,
   rendered_title: displayTask,
@@ -141,7 +141,7 @@ const activation = {
     playable_media_probe_required_in_ci: true
   },
   approval_required_for_consequential_actions: true,
-  action_authority: '@Seif'
+  action_authority: '@Owner'
 };
 
 fs.writeFileSync('logs/video-agent.json', JSON.stringify(activation, null, 2));
