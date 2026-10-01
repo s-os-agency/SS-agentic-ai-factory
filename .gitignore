@@ -3,7 +3,7 @@ node_modules/
 .env.*
 !.env.example
 
-# S/ Browser Runtime generated artifacts
+# Browser Runtime generated artifacts
 runtime/browser-stack/node_modules/
 runtime/browser-stack/package-lock.json
 runtime/browser-stack/.vendor/
