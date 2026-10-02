@@ -56,6 +56,7 @@ const companyDefs = [
 
 function matchesAny(name, hints) {
   const n = norm(name);
+  if (!n) return false;
   return hints.some((hint) => n === norm(hint) || n.includes(norm(hint)) || norm(hint).includes(n));
 }
 
@@ -202,4 +203,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { runPortfolioOrchestrator };
+module.exports = { runPortfolioOrchestrator, buildPortfolio };
