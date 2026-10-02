@@ -1,0 +1,31 @@
+name: Portfolio Mapping CI
+
+on:
+  pull_request:
+    paths:
+      - 'workflows/portfolio-orchestrator.js'
+      - 'tests/portfolio-orchestrator.test.cjs'
+      - '.github/workflows/portfolio-ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'workflows/portfolio-orchestrator.js'
+      - 'tests/portfolio-orchestrator.test.cjs'
+      - '.github/workflows/portfolio-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check portfolio runtime syntax
+        run: node --check workflows/portfolio-orchestrator.js
+      - name: Test portfolio mapping using local fixtures
+        run: node --test tests/portfolio-orchestrator.test.cjs
