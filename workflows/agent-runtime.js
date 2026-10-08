@@ -7,7 +7,25 @@ const { generateOfferPacks } = require('./offer-pack-generator');
 const { runPortfolioOrchestrator } = require('./portfolio-orchestrator');
 
 async function startAgents() {
-  const portfolio = await runPortfolioOrchestrator();
+  let portfolio;
+  try {
+    portfolio = await runPortfolioOrchestrator();
+  } catch (error) {
+    const cause = error && typeof error === 'object' ? error.cause : undefined;
+    const errorCode = cause && typeof cause === 'object' ? cause.code : undefined;
+    const errorHostname = cause && typeof cause === 'object' ? cause.hostname : undefined;
+    console.warn(JSON.stringify({
+      diagnostic: 'portfolio_orchestrator_unavailable',
+      message: error instanceof Error ? error.message : String(error),
+      error_code: errorCode || null,
+      hostname: errorHostname || null
+    }));
+    portfolio = {
+      status: 'degraded',
+      reason: 'portfolio_orchestrator_unavailable',
+      error_code: errorCode || null
+    };
+  }
 
   const runtime = {
     portfolio_orchestrator: portfolio,
