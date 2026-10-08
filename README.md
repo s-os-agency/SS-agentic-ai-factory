@@ -1,9 +1,8 @@
 # Agentic AI Factory
 
-Execution-first Cursor agent runtime.
+Execution-first Agency
 
 Structure:
-- .cursor/rules
 - workflows
 - runtime
 - agents
