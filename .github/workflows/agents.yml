@@ -13,6 +13,10 @@ on:
         default: ""
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+  repository_dispatch:
+    types: [agent-dispatch, service-account-update, bot-ops-check]
   schedule:
     # Avoid the top-of-hour congestion window for scheduled GitHub Actions.
     - cron: "17 * * * *"
@@ -21,54 +25,64 @@ jobs:
   run-agents:
     runs-on: ubuntu-latest
     env:
-      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      MONDAY_API_TOKEN: ${{ secrets.MONDAY_API_TOKEN }}
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      AGENT_PROPERTY: ${{ inputs.property || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent') && '#0108') || '' }}
-      AGENT_TASK: ${{ inputs.task || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent') && github.event.head_commit.message) || '' }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }
+      MONDAY_API_TOKEN: ${{ secrets.MONDAY_API_TOKEN }
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }
+      GH_SERVICE_TOKEN: ${{ secrets.GH_SERVICE_TOKEN }
+      NOTION_SERVICE_TOKEN: ${{ secrets.NOTION_SERVICE_TOKEN }
+      VERCEL_SERVICE_TOKEN: ${{ secrets.VERCEL_SERVICE_TOKEN }
+      LINEAR_SERVICE_TOKEN: ${{ secrets.LINEAR_SERVICE_TOKEN }
+      GAMMA_SERVICE_TOKEN: ${{ secrets.GAMMA_SERVICE_TOKEN }
+      FIGMA_SERVICE_TOKEN: ${{ secrets.FIGMA_SERVICE_TOKEN }
+      CANVA_SERVICE_TOKEN: ${{ secrets.CANVA_SERVICE_TOKEN }
+      COINBASE_SERVICE_TOKEN: ${{ secrets.COINBASE_SERVICE_TOKEN }
+      HYPERFRAMES_SERVICE_TOKEN: ${{ secrets.HYPERFRAMES_SERVICE_TOKEN }
+      AGENT_PROPERTY: ${{ inputs.property || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent') && '#0108') || '' }
+      AGENT_TASK: ${{ inputs.task || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent') && github.event.head_commit.message) || '' }
+      DISPATCH_TYPE: ${{ github.event.action || '' }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
       - name: Run revenue agent
-        if: ${{ inputs.property == 'all' || inputs.property == 'revenue' }}
+        if: ${{ inputs.property == 'all' || inputs.property == 'revenue' }
         run: npm run revenue
       - name: Run monitoring agent
-        if: ${{ inputs.property == 'all' || inputs.property == 'monitoring' }}
+        if: ${{ inputs.property == 'all' || inputs.property == 'monitoring' }
         run: npm run monitor
       - name: Install video runtime
-        if: ${{ inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent')) }}
+        if: ${{ inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent')) }
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
           ffmpeg -version | head -1
           ffprobe -version | head -1
       - name: Run video agent
-        if: ${{ inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent')) }}
+        if: ${{ inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent')) }
         run: npm run video
       - name: Verify video artifact
-        if: ${{ inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent')) }}
+        if: ${{ inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent')) }
         run: |
           test -n "$(find artifacts/video-factory -maxdepth 1 -name '*.mp4' -print -quit)"
           VIDEO_FILE="$(find artifacts/video-factory -maxdepth 1 -name '*.mp4' -print -quit)"
           ffprobe -v error -show_entries stream=codec_name,width,height -show_entries format=duration,size -of json "$VIDEO_FILE"
       - name: Upload playable video
-        if: ${{ always() && (inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent'))) }}
+        if: ${{ always() && (inputs.property == '#0108' || inputs.property == 'video' || (github.event_name == 'push' && contains(github.event.head_commit.message, 'Activate Video Agent'))) }
         uses: actions/upload-artifact@v4
         with:
-          name: video-factory-output-${{ github.run_id }}
+          name: video-factory-output-${{ github.run_id }
           path: artifacts/video-factory/*.mp4
           if-no-files-found: error
       - name: Run agents runtime
-        if: ${{ github.event_name == 'schedule' || inputs.property == 'all' || inputs.property == '' }}
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'repository_dispatch' || inputs.property == 'all' || inputs.property == '' }
         run: npm run agents
       - name: Upload runtime logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: runtime-logs-${{ github.run_id }}
+          name: runtime-logs-${{ github.run_id }
           path: logs/
           if-no-files-found: warn
