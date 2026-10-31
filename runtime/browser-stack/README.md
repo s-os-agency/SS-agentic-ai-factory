@@ -38,3 +38,17 @@ The browser worker must never commit, log, echo, or persist passwords, OTPs, pas
 ## Transaction boundary
 
 Browser access does not imply permission to make purchases, transfer funds, change account security, or perform another consequential write. Those actions remain separately governed. Low-risk navigation, availability checks, form preparation, and owner-approved authentication can proceed under normal browser-worker policy.
+
+## Browserbase live browser execution
+
+The repository includes a live Stagehand 4 browser entry point backed by Browserbase. It does not require a separate AI-provider API for each destination URL.
+
+```bash
+# Load BROWSERBASE_API_KEY through the runtime secret manager, not source control.
+npm run browser:bootstrap
+npm run browser:live -- https://example.com
+```
+
+A successful execution prints a JSON receipt containing the Browserbase session ID, requested URL, observed URL, and timestamps. A receipt confirms navigation only; it does not claim an authenticated destination login or completion of other agent actions. The script closes the session after reading the observed URL. For authenticated destinations, use an authorized persistent session and human authentication handoff; never bypass user-presence challenges.
+
+The hosted MCP configuration in `browserbase-mcp.json` remains a separate optional MCP transport. The live command uses the existing Stagehand dependency directly rather than assuming an MCP client is configured. The Browserbase account/API credential must be available in the runtime environment.
