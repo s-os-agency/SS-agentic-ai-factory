@@ -10,6 +10,7 @@
     "loop": "node workflows/autonomous.loop.js",
     "browser:bootstrap": "node runtime/browser-stack/bootstrap.mjs",
     "browser:verify": "node runtime/browser-stack/verify.mjs",
+    "browser:live": "node runtime/browser-stack/browserbase-live.mjs",
     "browser:agent": "cd runtime/browser-stack && npx --no-install agent-browser"
   }
 }
