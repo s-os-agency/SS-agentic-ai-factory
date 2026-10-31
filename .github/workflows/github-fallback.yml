@@ -1,11 +1,35 @@
-name: GitHub fallback audit
-on: workflow_dispatch
+name: GitHub worker runtime fallback
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Choose connectivity audit or a repository worker"
+        required: true
+        default: audit
+        type: choice
+        options:
+          - audit
+          - monitor
+          - revenue
+          - loop
+          - video
+          - agents
 jobs:
-  audit:
+  run:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: node runtime/github-fallback.mjs
+      - name: Run selected workload
+        env:
+          TASK: ${{ inputs.task }}
+          N8N_BASE_URL: ${{ secrets.N8N_BASE_URL }}
+        run: |
+          if [ "$TASK" = "audit" ]; then
+            node runtime/github-fallback.mjs
+          else
+            node runtime/github-worker-runner.mjs "$TASK"
+          fi
