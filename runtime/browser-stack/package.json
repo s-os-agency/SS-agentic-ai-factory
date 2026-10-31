@@ -9,6 +9,7 @@
   "scripts": {
     "bootstrap": "node bootstrap.mjs",
     "verify": "node verify.mjs",
+    "browserbase:live": "node browserbase-live.mjs",
     "agent-browser": "agent-browser"
   },
   "dependencies": {
