@@ -1,12 +1,12 @@
-# Governed Agent Runtime
+# Governed Agent System
 
-This folder contains the VPS-ready runtime package for the governed agent control plane.
+This folder contains the VPS-ready system package for the governed agent control panel.
 
 ## Purpose
 
-Create a real runnable starter runtime instead of a placeholder scaffold.
+Create a real runnable starter system instead of a placeholder scaffold.
 
-## Runtime services
+## System services
 
 - `caddy` — local reverse proxy for HTTP routing.
 - `agent-api` — governed agent control API.
@@ -31,12 +31,12 @@ Through the reverse proxy:
 - `GET /mcp`
 - `POST /mcp`
 
-## Governance baseline
+## Management baseline
 
 - External/write actions are approval-gated by default.
 - Direct routing is disabled by default.
-- Secrets are not returned by any endpoint.
-- There is no arbitrary shell endpoint.
+- Secrets are not returned by any service address.
+- There is no arbitrary shell service address.
 - Events are recorded for agent runs and approval requests.
 
 ## Deployment

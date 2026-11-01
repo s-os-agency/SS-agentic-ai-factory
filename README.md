@@ -4,7 +4,7 @@ Execution-first Agency
 
 Structure:
 - workflows
-- runtime
+- system
 - agents
 - logs
 

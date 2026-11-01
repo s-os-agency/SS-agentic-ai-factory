@@ -1,9 +1,9 @@
-# Browser Runtime Stack
+# Browser System Stack
 
 This package makes three browser engines available to Factory on demand:
 
 1. **OpenBrowser** — `OpenBrowserAI/openbrowser`, pinned to commit `b04fcf631fe67ddf7ab6d54f6388635d16f468f9` for a local/privacy-first Chromium path.
-2. **Stagehand + Browserbase** — `@browserbasehq/stagehand@4.0.2` for production browser-agent sessions, including persistent remote browser workflows when Browserbase credentials are injected at runtime.
+2. **Stagehand + Browserbase** — `@browserbasehq/stagehand@4.0.2` for production browser-agent sessions, including persistent remote browser workflows when Browserbase credentials are injected when the agent runs.
 3. **Vercel Labs agent-browser** — `agent-browser@0.35.2` for direct Chrome/CDP automation and deterministic CLI control.
 
 ## Bootstrap
@@ -15,7 +15,7 @@ npm run browser:bootstrap
 npm run browser:verify
 ```
 
-The bootstrap installs the two pinned npm packages, downloads Chrome for `agent-browser`, clones OpenBrowser at the reviewed commit, installs its dependencies, and builds it. Runtime artifacts live under `runtime/browser-stack/.vendor` and are intentionally not committed.
+The bootstrap installs the two pinned npm packages, downloads Chrome for `agent-browser`, clones OpenBrowser at the reviewed commit, installs its dependencies, and builds it. System artifacts live under `runtime/browser-stack/.vendor` and are intentionally not committed.
 
 ## Use
 
@@ -33,7 +33,7 @@ Use Stagehand when an agent needs resilient higher-level browser actions or a Br
 
 Login, UAE Pass, OTP, MFA, passkey, CAPTCHA, and other user-presence gates are **handoff points**, not failures. The browser worker must pause without fabricating credentials, expose the interactive session through the configured operator channel, allow the owner to approve/authenticate, and then continue in the same session.
 
-The browser worker must never commit, log, echo, or persist passwords, OTPs, passkeys, session cookies, API keys, or other secrets. Browserbase/model credentials are injected only at runtime and are not part of this repository.
+The browser worker must never commit, log, echo, or persist passwords, OTPs, passkeys, session cookies, API keys, or other secrets. Browserbase/model credentials are injected only when the agent runs and are not part of this repository.
 
 ## Transaction boundary
 

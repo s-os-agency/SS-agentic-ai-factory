@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sally Runtime Desk</title>
+  <title>Sally System Desk</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
@@ -156,7 +156,7 @@
 
     <section class="grid" style="margin-top:14px">
       <div class="card">
-        <div class="label">Runtime</div>
+        <div class="label">System</div>
         <div class="value ok">Ready</div>
         <p class="sub">Telegram → Vercel → GitHub Actions.</p>
       </div>
@@ -183,7 +183,7 @@
 
       <div>
         <button onclick="sallyRoute()">Send to Sally</button>
-        <button class="ghost" onclick="runAgents('Manual runtime dispatch from Sally desk')">Run Runtime</button>
+        <button class="ghost" onclick="runAgents('Manual runtime dispatch from Sally desk')">Run System</button>
         <button class="ghost" onclick="clearDesk()">Clear</button>
       </div>
     </section>
@@ -216,7 +216,7 @@
     }
 
     async function runAgents(source) {
-      writeLog('Sally is dispatching the runtime...');
+      writeLog('Sally is dispatching the system...');
 
       try {
         const response = await fetch('/api/run-agents', {
@@ -266,7 +266,7 @@
         lower.includes('clinic') ||
         lower.includes('clinics')
       ) {
-        writeLog('Sally understood: revenue action. Preparing runtime dispatch and revenue signal generation.');
+        writeLog('Starting your revenue agents.');
         runAgents(text);
         return;
       }
@@ -300,7 +300,7 @@
 
       writeLog(
         'Sally noted: ' + text +
-        '\n\nRecommended route: start runtime, generate signals, prepare approval-gated actions, then inspect GitHub Actions evidence.'
+        '\n\nStart your agents, prepare the next action and read the saved results.'
       );
     }
   </script>
