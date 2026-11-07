@@ -13,9 +13,7 @@ on:
         default: ""
   push:
     branches: [main]
-  schedule:
-    # Avoid the top-of-hour congestion window for scheduled GitHub Actions.
-    - cron: "17 * * * *"
+  # Retired cloud schedule: worker execution moved to the server runtime.
 
 jobs:
   run-agents:
@@ -63,7 +61,7 @@ jobs:
           path: artifacts/video-factory/*.mp4
           if-no-files-found: error
       - name: Run agents runtime
-        if: ${{ github.event_name == 'schedule' || inputs.property == 'all' || inputs.property == '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.property == 'all' }}
         run: npm run agents
       - name: Upload runtime logs
         if: always()
