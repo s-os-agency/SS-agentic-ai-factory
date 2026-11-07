@@ -11,3 +11,6 @@ runtime/browser-stack/.vendor/
 # Logs / OS
 *.log
 .DS_Store
+
+# Local worker queue and private receipts
+logs/workers/
