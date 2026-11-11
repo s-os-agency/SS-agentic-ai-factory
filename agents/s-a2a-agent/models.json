@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "project": "S/A2A Agent",
+  "owner": "S/Agency",
+  "source": "Hugging Face Hub metadata retrieved 2026-11-11",
+  "selection": {
+    "default": "Qwen/Qwen2.5-Omni-3B",
+    "advanced": "Qwen/Qwen3-Omni-30B-A3B-Instruct",
+    "policy": "Start with existing smaller model for tractable multimodal input/text-speech output. Advanced model is opt-in and requires significantly more GPU resources. Neither is universal media-to-media generation."
+  },
+  "models": [
+    {
+      "id": "Qwen/Qwen2.5-Omni-3B",
+      "role": "default",
+      "hf_url": "https://huggingface.co/Qwen/Qwen2.5-Omni-3B",
+      "task": "any-to-any",
+      "architecture": "qwen2_5_omni",
+      "license_tag": "other",
+      "inputs": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "outputs": [
+        "text",
+        "speech"
+      ],
+      "github_source": "https://github.com/QwenLM/Qwen2.5-Omni",
+      "runtime": "Transformers",
+      "integration": "existing agents/s-a2a-agent/app.py",
+      "status": "source_registered_not_deployed"
+    },
+    {
+      "id": "Qwen/Qwen3-Omni-30B-A3B-Instruct",
+      "role": "advanced_opt_in",
+      "hf_url": "https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct",
+      "task": "any-to-any",
+      "architecture": "qwen3_omni_moe",
+      "license_tag": "other",
+      "inputs": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "outputs": [
+        "text",
+        "speech"
+      ],
+      "github_source": "https://github.com/QwenLM/Qwen3-Omni",
+      "runtime": "model_specific_runtime_required",
+      "integration": "adapter_not_installed",
+      "status": "source_registered_not_deployed"
+    }
+  ],
+  "limits": [
+    "Do not treat 'any-to-any' task label as image/video generation support.",
+    "Do not mirror weights into GitHub; keep model references and integration source only.",
+    "Review each upstream model license before commercial redistribution.",
+    "HF OAuth token currently read-repos only; this GitHub manifest does not create an HF Space or endpoint."
+  ]
+}
