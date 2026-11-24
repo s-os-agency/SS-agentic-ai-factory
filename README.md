@@ -1,6 +1,6 @@
-# Agentic AI Factory
+# S/ Agentic AI Factory
 
-Execution-first Agency
+Execution-first Factory by S/Agency.
 
 Structure:
 - workflows
