@@ -11,5 +11,5 @@ Structure:
 Principles:
 - Real execution only
 - No fake metrics
-- Approval-gated external actions
 - Logs as evidence
+**S/** standardized by core
