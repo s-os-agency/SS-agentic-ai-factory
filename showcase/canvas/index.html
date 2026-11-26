@@ -80,6 +80,15 @@
   }
   .chip.on{color:var(--acc);border-color:rgba(110,231,255,.35);background:rgba(110,231,255,.08)}
 
+  /* team roster — dashed = registered in TEAM, no report method */
+  .roster{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+  .roster span{
+    font-size:9.5px;padding:2px 6px;border-radius:6px;
+    border:1px solid var(--stroke);color:#8e98ab;
+    background:rgba(255,255,255,.025);letter-spacing:.02em;
+  }
+  .roster span.muted{color:#4d5568;border-style:dashed;background:transparent}
+
   .kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
   .kanban .col{background:rgba(255,255,255,.025);border-radius:9px;padding:7px}
   .kanban .col b{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
@@ -94,8 +103,6 @@
   pre.code .s{color:var(--acc);font-style:normal}
   pre.code .c{color:#454d5e;font-style:normal}
   pre.code .h{color:var(--warm);font-style:normal}
-
-  .sketch{opacity:.75}
 
   /* ---------- HUD ---------- */
   #hud{position:fixed;inset:0;z-index:8;pointer-events:none}
@@ -361,45 +368,49 @@
 <div id="world">
 
   <div class="card" style="left:6%;top:16%;width:250px;--d:34;--delay:.15s">
-    <h4>Spec</h4>
-    <p>Ambient agents that read the canvas, cite sources, and leave a trail you can follow back to why.</p>
+    <h4>Team</h4>
+    <p>Team Orchestration Layer v3. Twelve registered ids, one shared state file, one trade log, one P&amp;L.</p>
+    <div class="roster" id="roster"></div>
     <div class="row">
-      <span class="chip on">draft</span><span class="chip">3 open questions</span>
+      <span class="chip on" id="chipIds">12 ids</span>
+      <span class="chip" id="chipSpeak">9 report</span>
+      <span class="chip" id="chipSilent">3 silent</span>
     </div>
   </div>
 
   <div class="card" style="left:74%;top:12%;width:260px;--d:52;--delay:.3s">
-    <h4>Flow</h4>
+    <h4>Pipeline</h4>
     <div class="kanban">
-      <div class="col"><b>now</b><div class="task"></div><div class="task"></div></div>
-      <div class="col"><b>next</b><div class="task"></div><div class="task"></div></div>
-      <div class="col"><b>done</b><div class="task"></div><div class="task"></div></div>
+      <div class="col"><b>scout</b><div class="task"></div><div class="task"></div></div>
+      <div class="col"><b>score</b><div class="task"></div><div class="task"></div></div>
+      <div class="col"><b>trade</b><div class="task"></div><div class="task"></div></div>
     </div>
   </div>
 
   <div class="card" style="left:70%;top:62%;width:290px;--d:42;--delay:.45s">
-    <h4>Endpoint</h4>
-<pre class="code"><span class="c">// tool exposed to every agent</span>
-<span class="k">POST</span> /v1/cite
-{
-  <span class="s">"source"</span>: <span class="s">"canvas://spec"</span>,
-  <span class="s">"scope"</span>:  <span class="s">"local | cloud | self"</span>
-}</pre>
-    <div class="row"><span class="chip on">live</span><span class="chip">cited 41×</span></div>
+    <h4>Routing</h4>
+<pre class="code"><span class="c">// boss_delegate — keyword → agent</span>
+<span class="s">"why"</span>      → <span class="k">reasoner</span>
+<span class="s">"market"</span>   → <span class="k">advisor</span>
+<span class="s">"next"</span>     → <span class="k">anticipator</span>
+<span class="s">"stake"</span>    → <span class="k">staker</span>
+<span class="s">"gas"</span>      → <span class="k">finance</span>
+<span class="s">"pnl"</span>      → <span class="k">accountant</span></pre>
+    <div class="row"><span class="chip on">8 routes</span><span class="chip">else: summary</span></div>
   </div>
 
-  <div class="card" style="left:8%;top:64%;width:230px;--d:26;--delay:.6s">
-    <h4>Sketch</h4>
-    <svg class="sketch" width="190" height="76" viewBox="0 0 190 76" fill="none" stroke="#8fa6c4" stroke-width="1.3" stroke-linecap="round">
-      <circle cx="24" cy="38" r="13"/>
-      <path d="M37 38h34"/>
-      <rect x="71" y="24" width="42" height="28" rx="7"/>
-      <path d="M113 38h26"/>
-      <path d="M139 26l14 12-14 12"/>
-      <path d="M24 10v-6M24 72v-6M158 38h14" opacity=".45"/>
-      <circle cx="24" cy="38" r="3.5" fill="#6ee7ff" stroke="none"/>
-    </svg>
-    <div class="row"><span class="chip">wireframe v0</span></div>
+  <div class="card" style="left:8%;top:64%;width:250px;--d:26;--delay:.6s">
+    <h4>State</h4>
+<pre class="code">team_state.json + trades.db
+<span class="c">// what survives a restart</span>
+<span class="k">trade_log</span>        last 50
+<span class="k">missed</span>           last 20
+<span class="k">scouter_picks</span>    last 10
+<span class="k">open_positions</span>   all
+<span class="k">daily_pnl</span>        resets at
+                 Dubai midnight
+<span class="k">total_pnl</span>        never resets</pre>
+    <div class="row"><span class="chip on">persisted</span><span class="chip">daily ≠ total</span></div>
   </div>
 
 </div>
@@ -482,24 +493,40 @@ const cvs = $('#field');
 const ctx = cvs.getContext('2d');
 let W = window.innerWidth, H = window.innerHeight, DPR = 1;
 
-const ROLES = [
-  ['Architect', 'what is it made of'],
-  ['Skeptic',   'what kills it'],
-  ['Operator',  'who runs it Monday'],
-  ['Ethicist',  'who gets hurt'],
-  ['Historian', 'what already failed'],
-  ['Futurist',  'what it becomes'],
-  ['Red Team',  'break it first']
+// Team Orchestration Layer v3 — the twelve ids registered in TEAM, in file
+// order. `speak` is true only when the file defines a get_*_report method
+// for that id. analyst, collector and researcher are registered but have no
+// report method and no boss_delegate route, so they can never answer.
+const TEAM = [
+  { id: 'boss',        name: 'Boss',        emoji: '👔', role: 'routes the question',    speak: true  },
+  { id: 'scouter',     name: 'Scouter',     emoji: '🔭', role: 'finds the movers',       speak: true  },
+  { id: 'analyst',     name: 'Analyst',     emoji: '📊', role: 'scores the picks',       speak: false },
+  { id: 'trader',      name: 'Trader',      emoji: '💰', role: 'holds the position',     speak: true  },
+  { id: 'staker',      name: 'Staker',      emoji: '🏦', role: 'puts capital to work',   speak: true  },
+  { id: 'finance',     name: 'Finance',     emoji: '🏧', role: 'keeps gas alive',        speak: true  },
+  { id: 'reasoner',    name: 'Reasoner',    emoji: '🔍', role: 'names the blocker',      speak: true  },
+  { id: 'advisor',     name: 'Advisor',     emoji: '🎯', role: 'reads it plain',         speak: true  },
+  { id: 'anticipator', name: 'Anticipator', emoji: '🔮', role: 'next step',              speak: true  },
+  { id: 'accountant',  name: 'Accountant',  emoji: '🧮', role: 'counts what is left',    speak: true  },
+  { id: 'collector',   name: 'Collector',   emoji: '🎁', role: 'watches passive income', speak: false },
+  { id: 'researcher',  name: 'Researcher',  emoji: '📚', role: 'reads three sources',    speak: false }
 ];
 
+// Seats are the speakers only, so the ring length and the 12-id roster can
+// never disagree.
+const ROLES = TEAM.filter(t => t.speak).map(t => [t.name, t.role]);
+
+// Each line restates a rule the code actually enforces.
 const LINES = [
-  "It's three ideas wearing one coat. Split them and it actually holds.",
-  "The premise assumes people will change a habit. They won't — not for this.",
-  "Who owns this on a Tuesday at 3am? Name them, or it quietly dies.",
-  "The data it needs is the data people regret giving. That's the whole cost.",
-  "This is 2011's promise with better typography. What is actually different?",
-  "If it works, it stops being a product and becomes a default. Build for that.",
-  "Give me a weekend and one bored teenager. I'll end it. Want to see how?"
+  "Delegation is keyword routing: why → Reasoner, gas → Finance, pnl → Accountant. No match, you get the summary.",
+  "I scan every USDT pair and hand over movers. If my list is empty, the market is flat — not the system.",
+  "A trade only exists once the analyst approves it. No approval, no entry. I do not guess.",
+  "Idle capital earns. But if gas drops under $5, Finance pulls it back and the yield stops. That is the trade.",
+  "Gas under $5 is a hard stop. Under $10 is a warning. Under $5 with Earn funded, I redeem automatically.",
+  "The filter wall is the usual answer: over 95% of signals blocked. Thresholds too tight reads as 'no opportunity'.",
+  "Flat market, low gas, no trades. Three different problems that all look like a quiet day from the outside.",
+  "Do not lower thresholds to force a trade. Add gas, or widen what the analyst is allowed to approve.",
+  "Daily P&L resets at Dubai midnight. Total P&L never does. The gap between the two is the whole story."
 ];
 
 let agents = [];
@@ -922,12 +949,12 @@ function advanceBubble() {
 }
 
 const MEMO = {
-  verdict: 'Ship the smallest version that proves the habit — not the idea.',
+  verdict: 'Nothing is losing money. The system is blocked before entry — gas, filters, or a flat market.',
   lines: [
-    ['Build a 2-week, 1-team pilot. Success = the habit sticks without a reminder.', false],
-    ["Do not touch user data until the Ethicist's question has an answer in writing.", false],
-    ['Open question: who owns this on a Tuesday at 3am? Unassigned.', false],
-    ['Dissent (Historian): believes this repeats a 2011 failure. Wants the pilot capped.', true]
+    ['Gas under $5 stops every trade. Under $10 only warns. That single threshold is the whole gate.', false],
+    ['Over 95% of signals blocked reads as "no opportunity". It is the filter wall, not a quiet market.', false],
+    ['analyst, collector and researcher are registered in TEAM but have no report method. They cannot answer.', false],
+    ['Dissent (Finance): redeeming from Earn to feed gas silently stops the yield it was earning.', true]
   ]
 };
 
@@ -939,9 +966,9 @@ function showMemo() {
   const dissents = MEMO.lines.filter(l => l[1]).length;
   memoChips.innerHTML = '';
   [
-    'canvas://spec',
+    'team v3',
     `${ROLES.length} seats`,
-    `${MEMO.lines.length} notes`,
+    `${TEAM.length} ids`,
     `${dissents} dissent`
   ].forEach((t, i) => {
     const c = document.createElement('span');
@@ -1177,9 +1204,29 @@ document.addEventListener('pointerdown', e => {
 /* ============================================================
    9 — boot
    ============================================================ */
+// Roster and chips are derived from TEAM so the counts cannot drift.
+function renderRoster() {
+  const rosterEl = $('#roster');
+  rosterEl.innerHTML = '';
+  TEAM.forEach(t => {
+    const s = document.createElement('span');
+    if (!t.speak) s.className = 'muted';
+    s.textContent = `${t.emoji} ${t.name}`;
+    s.title = t.speak ? `${t.name} — ${t.role}` : `${t.name} — registered, no report method`;
+    rosterEl.appendChild(s);
+  });
+  const speakers = TEAM.filter(t => t.speak).length;
+  const silent = TEAM.length - speakers;
+  $('#chipIds').textContent = `${TEAM.length} ids`;
+  $('#chipSpeak').textContent = `${speakers} report`;
+  $('#chipSilent').textContent = `${silent} silent`;
+  $('#chipSilent').classList.toggle('on', silent > 0);
+}
+
 resize();
 buildFixList();
 renderList();
+renderRoster();
 requestAnimationFrame(frame);
 
 // ⌘K / Ctrl K label matches the platform
